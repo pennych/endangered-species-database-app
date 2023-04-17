@@ -4,31 +4,22 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.SystemColor;
-
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import main.DBConnection;
-import sql.SqlConservationEffort;
-
 /**
- * Displays all information on a selected species
- * in a more detailed JPanel isolated from the rest
- * of the table entries.
+ * Displays all information on a selected species in a more detailed JPanel
+ * isolated from the rest of the table entries.
  * 
- * In this display window, the user also has the option
- * to update any fields or delete a row altogether.
+ * In this display window, the user also has the option to update any fields or
+ * delete a row altogether.
  */
 public class SpeciesView extends JPanel {
-
 	private JTextArea commNameTextArea;
 	private JTextArea sciNameTextArea;
 	private JTextArea popTextArea;
@@ -182,7 +173,6 @@ public class SpeciesView extends JPanel {
 		speciesInfoDisplayPanel.add(threatTextArea);
 
 		// *** CONSERVATION FIELD
-
 		JLabel conservationLabel = new JLabel("Conservation Efforts:");
 		conservationLabel.setOpaque(true);
 		conservationLabel.setBackground(Color.LIGHT_GRAY);
@@ -394,5 +384,4 @@ public class SpeciesView extends JPanel {
 	public JComboBox getUpdateColumnBox() {
 		return updateColumnBox;
 	}
-
 }
