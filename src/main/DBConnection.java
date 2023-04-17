@@ -1,6 +1,7 @@
 package main;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,17 +13,16 @@ import sql.SqlRegion;
 import sql.SqlThreat;
 
 /**
- * Holds all query connections made to the database tables
+ * Creates a connection to the database and has methods to query the database.
  * 
- * @author Penny Chanthavong, et al
+ * @author Penny Chanthavong
  *
  */
 public class DBConnection {
 	private static String databaseURL = "jdbc:derby:EndangeredSpeciesDB;create=true";
-	private static int esaIDToQuery;
 
 	/**
-	 * Sets up the SQL tables in the database.
+	 * Performs initial set up of the database and SQL tables.
 	 * 
 	 * @author Penny Chanthavong
 	 */
@@ -30,50 +30,59 @@ public class DBConnection {
 		try (Connection connection = DriverManager.getConnection(databaseURL);
 				Statement statement = connection.createStatement();) {
 
-			// ----- SETUP for EndangeredSpecies table -------
-//			statement.execute(SqlEndangeredSpecies.createTable());
-//			statement.execute(SqlEndangeredSpecies.insertData());
-//			statement.execute(SqlEndangeredSpecies.dropTable());
+			/*
+			 * Author: Michal Dabrowski Date: 2021 Availability:
+			 * https://www.baeldung.com/jdbc-check-table-exists
+			 */
+			DatabaseMetaData databaseMetaData = connection.getMetaData();
+			ResultSet resultSet = databaseMetaData.getTables(null, null, null, new String[] { "TABLE" });
 
-			// ----- SETUP for ESAConservationStatus table -------
-//			 statement.execute(SqlESAConservationStatus.createTable());
-//			 statement.execute(SqlESAConservationStatus.insertData());
-//			 statement.execute(SqlESAConservationStatus.deleteData());
-//			 statement.execute(SqlESAConservationStatus.dropTable());
+			if (!resultSet.next()) {
+				// setup for EndangeredSpecies table
+				statement.execute(SqlEndangeredSpecies.createTable());
+				statement.execute(SqlEndangeredSpecies.insertData());
+				// statement.execute(SqlEndangeredSpecies.dropTable());
 
-			// ----- SETUP for Threat table -------
-//			 statement.execute(SqlThreat.createTable());
-//			 statement.execute(SqlThreat.insertData());
-//			 statement.execute(SqlThreat.dropTable());
+				// setup for ESAConservationStatus table
+				statement.execute(SqlESAConservationStatus.createTable());
+				statement.execute(SqlESAConservationStatus.insertData());
+				// statement.execute(SqlESAConservationStatus.dropTable());
 
-			// ----- SETUP for ConservationEffort table -------
-//			statement.execute(SqlConservationEffort.createTable());
-//			statement.execute(SqlConservationEffort.insertData());
-//			 statement.execute(SqlConservationEffort.dropTable());
+				// setup for Threat table
+				statement.execute(SqlThreat.createTable());
+				statement.execute(SqlThreat.insertData());
+				// statement.execute(SqlThreat.dropTable());
 
-			// ----- SETUP for Region table -------
-//			statement.execute(SqlRegion.createTable());
-//			statement.execute(SqlRegion.insertData());
-//		 	statement.execute(SqlRegion.dropTable());
+				// setup for ConservationEffort table
+				statement.execute(SqlConservationEffort.createTable());
+				statement.execute(SqlConservationEffort.insertData());
+				// statement.execute(SqlConservationEffort.dropTable());
 
-			printTableResultSets(statement);
-			System.out.println();
+				// setup for Region table
+				statement.execute(SqlRegion.createTable());
+				statement.execute(SqlRegion.insertData());
+				// statement.execute(SqlRegion.dropTable());
+			}
+			// printTableResultSets(statement); // used for positive testing database
 			System.out.println("done");
 
 		} catch (SQLException e) {
+			System.out.println("sql state: " + e.getSQLState());
 			e.printStackTrace();
 		}
 
 	}
 
 	/**
-	 * Prints results of the table result sets to the console
+	 * Prints table result sets to the console. Primarily used to test that data has
+	 * been loaded to the database.
 	 * 
 	 * @param statement
 	 * @throws SQLException
 	 * 
 	 * @author Penny Chanthavong
 	 */
+	@SuppressWarnings("unused")
 	private static void printTableResultSets(Statement statement) throws SQLException {
 		// prints data from the EndangeredSpecies table
 		ResultSet results = statement.executeQuery(SqlEndangeredSpecies.allData());
@@ -87,7 +96,6 @@ public class DBConnection {
 			String scientificName = results.getString("ScientificName");
 			String classification = results.getString("Class");
 			int population = results.getInt("Population");
-			// int iucnStatus = results.getInt("IUCN_Conservation_Status");
 			int esaStatus = results.getInt("ESA_Conservation_Status");
 			int threatId = results.getInt("ThreatId");
 			int effortId = results.getInt("EffortId");
@@ -142,7 +150,7 @@ public class DBConnection {
 	}
 
 	/**
-	 * Joins two tables to get the value from the Status column.
+	 * Joins two tables and returns the value from the Status column.
 	 * 
 	 * @param query
 	 * @return string value from the Status column
@@ -223,7 +231,128 @@ public class DBConnection {
 	}
 
 	/**
-	 * All data from Region table
+	 * Returns selected data from EndangeredSpecies table based on string query.
+	 * 
+	 * @author Penny C. & et al
+	 * @param query
+	 * @return common name, scientific name, ESA status, and population.
+	 */
+	public static String executeQueryReturnSelectedData(String query) {
+		StringBuilder sb = new StringBuilder();
+		try (Connection connection = DriverManager.getConnection(databaseURL);
+				Statement statement = connection.createStatement();) {
+			ResultSet results = statement.executeQuery(query);
+
+			sb.append(String.format("%-15s %-33s %-33s %-11s %-11s\n", "ID", "Common name", "Scientific name",
+					"ESA Status", "Population"));
+
+			while (results.next()) {
+				String id = results.getString("Id");
+				String commonName = results.getString("CommonName");
+				String scientificName = results.getString("ScientificName");
+				int esaStatus = results.getInt("ESA_Conservation_Status");
+				int population = results.getInt("Population");
+				System.out.printf("%-15s %-33s %-33s %-11d %-11d\n", id, commonName, scientificName, esaStatus,
+						population);
+
+				sb.append(String.format("%-15s %-33s %-33s %-11d %-11d\n", id, commonName, scientificName, esaStatus,
+						population));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Returns all data from EndangeredSpecies table and displays in Species Query
+	 * panel.
+	 * 
+	 * @param query
+	 * @return
+	 * @author Penny Chanthavong
+	 */
+	public static String executeQueryReturnAllEndangeredSpeciesData(String query) {
+		StringBuilder sb = new StringBuilder();
+		try (Connection connection = DriverManager.getConnection(databaseURL);
+				Statement statement = connection.createStatement();) {
+			ResultSet results = statement.executeQuery(query);
+
+			sb.append(String.format("%-3s %-33s %-33s %-10s %-11s %-11s %-10s %-10s%n", "ID", "Common name",
+					"Scientific name", "Class", "Population", "ESA Status", "ThreatId", "EffortId"));
+
+			while (results.next()) {
+				int id = results.getInt("Id");
+				String commonName = results.getString("CommonName");
+				String scientificName = results.getString("ScientificName");
+				String classification = results.getString("Class");
+				int population = results.getInt("Population");
+				int esaStatus = results.getInt("ESA_Conservation_Status");
+				int threatId = results.getInt("ThreatId");
+				int effortId = results.getInt("EffortId");
+
+				sb.append(String.format("%-3d %-33s %-33s %-10s %-11d %-11d %-10d %-10d%n", id, commonName,
+						scientificName, classification, population, esaStatus, threatId, effortId));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Updates a column based on the passed in string query.
+	 * 
+	 * @param query
+	 */
+	public static void updateColumnFromTable(String query) {
+		try (Connection connection = DriverManager.getConnection(databaseURL);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Executes the SQL query passed to the method.
+	 * 
+	 * @param query
+	 */
+	public static void executeSQLQuery(String query) {
+		try (Connection connection = DriverManager.getConnection(databaseURL);
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Performs query to get ESA id from ESAConservation table.
+	 * 
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
+	public static String printESAID(String query) throws SQLException {
+		StringBuilder sb = new StringBuilder();
+		try (Connection connection = DriverManager.getConnection(databaseURL);
+				Statement statement = connection.createStatement();) {
+			ResultSet results = statement.executeQuery(query);
+			while (results.next()) {
+				sb.append(results.getString("ID"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+
+	}
+
+	/**
+	 * Returns all data from Region table.
 	 * 
 	 * @param query
 	 * @return
@@ -251,139 +380,5 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 		return sb.toString();
-	}
-
-	/**
-	 * RETURNS SELECTED DATA FROM ENDANGERED SPECIES TABLE BASED ON QUERY
-	 * 
-	 * @param query
-	 * @return common name, scientific name, ESA status, and population.
-	 */
-	public static String executeQueryReturnSelectedData(String query) {
-		StringBuilder sb = new StringBuilder();
-		try (Connection connection = DriverManager.getConnection(databaseURL);
-				Statement statement = connection.createStatement();) {
-			ResultSet results = statement.executeQuery(query);
-
-			sb.append(String.format("%-33s %-33s %-11s %-11s\n", "Common name", "Scientific name", "ESA Status",
-					"Population"));
-
-			while (results.next()) {
-				String commonName = results.getString("CommonName");
-				String scientificName = results.getString("ScientificName");
-				int esaStatus = results.getInt("ESA_Conservation_Status");
-				int population = results.getInt("Population");
-				System.out.printf("%-33s %-33s %-11d %-11d\n", commonName, scientificName, esaStatus, population);
-
-				sb.append(
-						String.format("%-33s %-33s %-11d %-11d\n", commonName, scientificName, esaStatus, population));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Returns all info from Endangered Species table and displays in Species Query
-	 * panel
-	 * 
-	 * @param query
-	 * @return
-	 * @author Penny Chanthavong
-	 */
-	public static String executeQueryReturnAllEndangeredSpeciesData(String query) {
-		StringBuilder sb = new StringBuilder();
-		try (Connection connection = DriverManager.getConnection(databaseURL);
-				Statement statement = connection.createStatement();) {
-			ResultSet results = statement.executeQuery(query);
-
-			sb.append(String.format("%-3s %-33s %-33s %-10s %-11s %-11s %-10s %-10s%n", "ID", "Common name",
-					"Scientific name", "Class", "Population", "ESA Status", "ThreatId", "EffortId"));
-
-			while (results.next()) {
-				int Id = results.getInt("Id");
-				String commonName = results.getString("CommonName");
-				String scientificName = results.getString("ScientificName");
-				String classification = results.getString("Class");
-				int population = results.getInt("Population");
-				int esaStatus = results.getInt("ESA_Conservation_Status");
-				int threatId = results.getInt("ThreatId");
-				int effortId = results.getInt("EffortId");
-
-				sb.append(String.format("%-3d %-33s %-33s %-10s %-11d %-11d %-10d %-10d%n", Id, commonName,
-						scientificName, classification, population, esaStatus, threatId, effortId));
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * QUERY TO UPDATE A COLUMN IN A SPECIFIED TABLE BASED ON THE QUERY PASSED
-	 * 
-	 * @param query
-	 */
-	public static void updateColumnFromTable(String query) {
-		try (Connection connection = DriverManager.getConnection(databaseURL);
-				Statement statement = connection.createStatement();) {
-			statement.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * QUERY TO DELETE A ROW FROM A TABLE BASED ON QUERY PASSED
-	 * 
-	 * @param query
-	 */
-	public static void deleteRowFromTable(String query) {
-		try (Connection connection = DriverManager.getConnection(databaseURL);
-				Statement statement = connection.createStatement();) {
-			statement.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * QUERY TO INSERT DATA INTO A TABLE BASED ON QUERY PASSED
-	 * 
-	 * @param query
-	 */
-	public static void executeQueryInsertDataToDB(String query) {
-		try (Connection connection = DriverManager.getConnection(databaseURL);
-				Statement statement = connection.createStatement();) {
-
-			statement.executeUpdate(query);
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * QUERY TO GET AN ESA ID FROM ESA CONSERVATION TABLE
-	 * 
-	 * @param query
-	 * @return
-	 * @throws SQLException
-	 */
-	public static String printESAID(String query) throws SQLException {
-		StringBuilder sb = new StringBuilder();
-		try (Connection connection = DriverManager.getConnection(databaseURL);
-				Statement statement = connection.createStatement();) {
-			ResultSet results = statement.executeQuery(query);
-			while (results.next()) {
-				sb.append(results.getString("ID"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return sb.toString();
-
 	}
 }
