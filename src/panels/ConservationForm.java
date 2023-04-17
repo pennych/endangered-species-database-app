@@ -1,12 +1,8 @@
 package panels;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import sql.SqlESAConservationStatus;
 import sql.SqlEndangeredSpecies;
 import javax.swing.JTextField;
@@ -147,13 +143,14 @@ public class ConservationForm extends JPanel {
 		locField.setBounds(688, 170, 193, 41);
 		panel.add(locField);
 
-		submitBtn = new JButton("SUBMIT");
-		submitBtn.setBounds(60, 695, 977, 90);
-		add(submitBtn);
-
 		errorLbl = new JLabel("");
 		errorLbl.setBounds(192, 377, 193, 14);
 		panel.add(errorLbl);
+		
+		submitBtn = new JButton("SUBMIT");
+		submitBtn.setBounds(739, 694, 193, 37);
+		submitBtn.setFocusable(false);
+		add(submitBtn);
 
 	}
 
@@ -239,5 +236,4 @@ public class ConservationForm extends JPanel {
 	public JButton getSubmitBtn() {
 		return submitBtn;
 	}
-
 }
