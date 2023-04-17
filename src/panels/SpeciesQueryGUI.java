@@ -11,21 +11,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import sql.SqlESAConservationStatus;
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import javax.swing.JRadioButton;
 
 /**
@@ -44,9 +38,9 @@ public class SpeciesQueryGUI extends JPanel {
 	private JTextArea siOverviewTextArea;
 	private JTextField siIDTextField;
 	private JButton submitSiBtn;
-	private JButton submitBtn;
+//	private JButton submitBtn;
 	private JLabel displayErrorLbl;
-	private JLabel queryLbl;
+//	private JLabel queryLbl;
 	private JComboBox statusBox;
 	private JComboBox classBox;
 	private JLabel sortLbl;
@@ -54,10 +48,11 @@ public class SpeciesQueryGUI extends JPanel {
 	private JRadioButton idSortBtn;
 	private JRadioButton nameSortBtn;
 	private JRadioButton popBtn;
-	private JComboBox updateColumnBox;
+//	private JComboBox<String> updateColumnBox;
 	private JLabel esaClassChoiceLbl;
-	private JLabel lblNewLabel_1;
+	private JLabel infoLbl;
 
+	@SuppressWarnings("unchecked")
 	public SpeciesQueryGUI() {
 		setLayout(null);
 		setBounds(0, 0, 1100, 900);
@@ -77,7 +72,7 @@ public class SpeciesQueryGUI extends JPanel {
 		siOverviewTextArea = new JTextArea();
 		scrollPane.setViewportView(siOverviewTextArea);
 		siOverviewTextArea.setBackground(Color.WHITE);
-		siOverviewTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
+		siOverviewTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 
 		// PANEL FOR SELECTING A SPECIES TO VIEW INFO FOR
 		JPanel siPanel = new JPanel();
@@ -154,7 +149,7 @@ public class SpeciesQueryGUI extends JPanel {
 
 		String[] speciesClasses = { "Mammal", "Bird", "Fish", "Reptile", "Plant" };
 
-		classBox = new JComboBox(speciesClasses);
+		classBox = new JComboBox<>(speciesClasses);
 		classBox.setBounds(20, 84, 200, 50);
 		selectSortpanel.add(classBox);
 		classBox.setName("Select Species");
@@ -172,15 +167,16 @@ public class SpeciesQueryGUI extends JPanel {
 		selectStatusLbl.setBounds(243, 57, 200, 14);
 		selectSortpanel.add(selectStatusLbl);
 
-		lblNewLabel_1 = new JLabel(
+		infoLbl = new JLabel(
 				"Listed below are all species found in Utah that are currently being monitored until endangerment status improves");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(50, 296, 978, 16);
-		add(lblNewLabel_1);
-		
+		infoLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		infoLbl.setBounds(50, 296, 978, 16);
+		add(infoLbl);
+
 		/*
 		 * Queries the database for the ESA status and gets added to the JComboBox and
 		 * displays as a drop-down.
+		 * 
 		 * @author Penny Chanthavong
 		 */
 		try (Connection connection = DriverManager.getConnection("jdbc:derby:EndangeredSpeciesDB;create=true");
@@ -227,11 +223,11 @@ public class SpeciesQueryGUI extends JPanel {
 	/**
 	 * @return the statusBox
 	 */
-	public JComboBox getStatusBox() {
+	public JComboBox<String> getStatusBox() {
 		return statusBox;
 	}
 
-	public JComboBox getClassBox() {
+	public JComboBox<String> getClassBox() {
 		return classBox;
 	}
 
