@@ -162,14 +162,7 @@ public class MainFrame extends JFrame {
 		conservationView.getUpdateColumnBox().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				String selectedColumn = (String) conservationView.getUpdateColumnBox().getSelectedItem();
-
-				if (selectedColumn == "StartDate") {
-					conservationView.getStartDateTextArea().setBackground(Color.YELLOW);
-					conservationView.getStartDateTextArea().setEditable(true);
-					conservationView.getStartDateTextArea().setVisible(true);
-				}
 
 				if (selectedColumn == "Organization") {
 					conservationView.getOrgTextArea().setBackground(Color.YELLOW);
@@ -199,13 +192,8 @@ public class MainFrame extends JFrame {
 				String updatedOrgData = conservationView.getStartDateTextArea().getText();
 				int rowToUpdateValue = Integer.parseInt(conservationOV.getCeIDTextField().getText());
 
-				System.out.println(updatedOrgData);
-				System.out.println(rowToUpdateValue);
+				DBConnection.updateColumnFromTable(SqlConservationEffort.updateStartDate(rowToUpdateValue, updatedOrgData));
 
-				DBConnection
-						.updateColumnFromTable(SqlConservationEffort.updateStartDate(rowToUpdateValue, updatedOrgData));
-
-				System.out.print("Date entry updated");
 				conservationView.getStartDateTextArea().setBackground(Color.LIGHT_GRAY);
 				conservationView.getStartDateTextArea().setEditable(false);
 				conservationView.getUpdateColumnBox().setVisible(false);
@@ -223,13 +211,10 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String updatedOrgData = conservationView.getOrgTextArea().getText();
 				int rowToUpdateValue = conserEffIDToUpdate;
-				System.out.println(updatedOrgData);
-				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlConservationEffort.updateOrganizationColumn(rowToUpdateValue, updatedOrgData));
 
-				System.out.print("Date entry updated");
 				conservationView.getOrgTextArea().setBackground(Color.LIGHT_GRAY);
 				conservationView.getOrgTextArea().setEditable(false);
 				conservationView.getUpdateColumnBox().setVisible(false);
@@ -247,8 +232,6 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String updatedWebData = conservationView.getWebsiteTextArea().getText();
 				int rowToUpdateValue = conserEffIDToUpdate;
-				System.out.println(updatedWebData);
-				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlConservationEffort.updateWebsiteColumn(rowToUpdateValue, updatedWebData));
@@ -291,8 +274,8 @@ public class MainFrame extends JFrame {
 				int ceID = Integer.parseInt(conservationOV.getCeIDTextField().getText());
 				DBConnection.executeSQLQuery(SqlConservationEffort.deleteConservationRow(ceID));
 
-				conservationOV.getCeOverviewTextArea()
-						.setText(DBConnection.executeQueryReturnAllCEData(SqlConservationEffort.allData()));
+				conservationOV.getCeOverviewTextArea().setText(
+						DBConnection.executeQueryReturnAllCEData(SqlConservationEffort.allData()));
 				conservationOV.getCeOverviewTextArea().setLineWrap(true);
 				conservationOV.getCeOverviewTextArea().setWrapStyleWord(true);
 				conservationOV.getCeOverviewTextArea().setEditable(false);
@@ -313,8 +296,8 @@ public class MainFrame extends JFrame {
 				if (conservationForm.getStatusField().isEmpty() || conservationForm.getStartDateField().isEmpty()
 						|| conservationForm.getOrgField().isEmpty() || conservationForm.getWebsiteField().isEmpty()
 						|| conservationForm.getStatusField().isEmpty() || conservationForm.getLocField().isEmpty()) {
-					conservationForm.getErrorLbl()
-							.setText("<html><font color='red'>Enter all fields to submit form.</font></html>");
+					conservationForm.getErrorLbl().setText(
+							"<html><font color='red'>Enter all fields to submit form.</font></html>");
 				} else {
 					String query = SqlConservationEffort.insertDataWithParams(conservationForm.getStatusField(),
 							conservationForm.getStartDateField(), conservationForm.getSpeciesComboBoxIndex(),
@@ -411,9 +394,9 @@ public class MainFrame extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				System.out.println("Status ID value: " + statusID);
+//				System.out.println("Status ID value: " + statusID);
 				int statusIDToQuery = Integer.valueOf(statusID);
-				System.out.println("Status int value: " + statusIDToQuery);
+//				System.out.println("Status int value: " + statusIDToQuery);
 
 				speciesQuery.getSiOverviewTextArea().setText(DBConnection
 						.executeQueryReturnSelectedData(SqlEndangeredSpecies.returnSpecifiedStatus(statusIDToQuery)));
@@ -515,9 +498,7 @@ public class MainFrame extends JFrame {
 					speciesView.getConsEffortField().setBackground(Color.YELLOW);
 					speciesView.getConsEffortField().setEditable(true);
 					speciesView.getsubmitUpdateConsEffBtn().setVisible(true);
-
 				}
-
 			}
 		});
 
@@ -526,13 +507,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String updatedCommonNameData = speciesView.getCommNameTextArea().getText();
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedCommonNameData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedCommonNameData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlEndangeredSpecies.updateCommonNameColumn(rowToUpdateValue, updatedCommonNameData));
 
-				System.out.print("CommonName entry updated");
+//				System.out.print("CommonName entry updated");
 //				contentPane.remove(speciesView);
 //				contentPane.add(speciesQuery, BorderLayout.CENTER);
 				speciesView.getCommNameTextArea().setBackground(Color.LIGHT_GRAY);
@@ -541,7 +522,6 @@ public class MainFrame extends JFrame {
 				speciesView.getSubmitUpdateCommonNameBtn().setVisible(false);
 				contentPane.revalidate();
 				contentPane.repaint();
-
 			}
 		});
 
@@ -550,13 +530,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String updatedSciNameData = speciesView.getSciNameTextArea().getText();
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedSciNameData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedSciNameData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlEndangeredSpecies.updateScientificNameColumn(rowToUpdateValue, updatedSciNameData));
 
-				System.out.print("ScientificName entry updated");
+//				System.out.print("ScientificName entry updated");
 				speciesView.getSciNameTextArea().setBackground(Color.LIGHT_GRAY);
 				speciesView.getSciNameTextArea().setEditable(false);
 				speciesView.getUpdateColumnBox().setVisible(false);
@@ -571,13 +551,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String updatedClassData = speciesView.getClassField().getText();
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedClassData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedClassData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlEndangeredSpecies.updateClassColumn(rowToUpdateValue, updatedClassData));
 
-				System.out.print("Class entry updated");
+//				System.out.print("Class entry updated");
 				speciesView.getClassField().setBackground(Color.LIGHT_GRAY);
 				speciesView.getClassField().setEditable(false);
 				speciesView.getUpdateColumnBox().setVisible(false);
@@ -592,13 +572,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int updatedPopData = Integer.parseInt(speciesView.getPopField().getText());
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedPopData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedPopData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection
 						.updateColumnFromTable(SqlEndangeredSpecies.updatePopColumn(rowToUpdateValue, updatedPopData));
 
-				System.out.print("Population entry updated");
+//				System.out.print("Population entry updated");
 				speciesView.getPopField().setBackground(Color.LIGHT_GRAY);
 				speciesView.getPopField().setEditable(false);
 				speciesView.getUpdateColumnBox().setVisible(false);
@@ -613,13 +593,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int updatedESAData = Integer.parseInt(speciesView.getEsaField().getText());
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedESAData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedESAData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection
 						.updateColumnFromTable(SqlEndangeredSpecies.updateESAColumn(rowToUpdateValue, updatedESAData));
 
-				System.out.print("ESA entry updated");
+//				System.out.print("ESA entry updated");
 				speciesView.getEsaField().setBackground(Color.LIGHT_GRAY);
 				speciesView.getEsaField().setEditable(false);
 				speciesView.getUpdateColumnBox().setVisible(false);
@@ -634,13 +614,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int updatedThreatData = Integer.parseInt(speciesView.getThreatField().getText());
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedThreatData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedThreatData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlEndangeredSpecies.updateThreatIDColumn(rowToUpdateValue, updatedThreatData));
 
-				System.out.print("Threat entry updated");
+//				System.out.print("Threat entry updated");
 				speciesView.getThreatField().setBackground(Color.LIGHT_GRAY);
 				speciesView.getThreatField().setEditable(false);
 				speciesView.getUpdateColumnBox().setVisible(false);
@@ -655,13 +635,13 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int updatedConsEffData = Integer.parseInt(speciesView.getConsEffortField().getText());
 				int rowToUpdateValue = speciesIDToUpdate;
-				System.out.println(updatedConsEffData);
-				System.out.println(rowToUpdateValue);
+//				System.out.println(updatedConsEffData);
+//				System.out.println(rowToUpdateValue);
 
 				DBConnection.updateColumnFromTable(
 						SqlEndangeredSpecies.updateEffortIDColumn(rowToUpdateValue, updatedConsEffData));
 
-				System.out.print("Cons Effort entry updated");
+//				System.out.print("Cons Effort entry updated");
 				speciesView.getConsEffortField().setBackground(Color.LIGHT_GRAY);
 				speciesView.getConsEffortField().setEditable(false);
 				speciesView.getUpdateColumnBox().setVisible(false);
@@ -683,7 +663,7 @@ public class MainFrame extends JFrame {
 				speciesQuery.getSiOverviewTextArea().setWrapStyleWord(true);
 				speciesQuery.getSiOverviewTextArea().setEditable(false);
 
-				System.out.print("row deleted");
+//				System.out.print("row deleted");
 				contentPane.remove(current);
 				contentPane.add(speciesQuery, BorderLayout.CENTER);
 				current = speciesQuery;
@@ -890,6 +870,5 @@ public class MainFrame extends JFrame {
 			break;
 		}
 		return desc;
-
 	}
 }
