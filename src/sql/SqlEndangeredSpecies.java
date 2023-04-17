@@ -11,7 +11,7 @@ public class SqlEndangeredSpecies {
 	/**
 	 * Creates the EndangeredSpecies table.
 	 * 
-	 * @author Penny Chanthavong 
+	 * @author Penny Chanthavong
 	 */
 	public static String createTable() {
 
@@ -194,8 +194,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updateCommonNameColumn(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("String to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET CommonName = " + "'" + updatedData + "'" + " WHERE ID = " + ID;
 	}
 
@@ -206,8 +204,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updateScientificNameColumn(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("String to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET ScientificName = " + "'" + updatedData + "'" + " WHERE ID = " + ID;
 	}
 
@@ -218,8 +214,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updateClassColumn(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("String to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET Class = " + "'" + updatedData + "'" + " WHERE ID = " + ID;
 	}
 
@@ -230,8 +224,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updatePopColumn(int ID, int updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET Population = " + updatedData + " WHERE ID = " + ID;
 	}
 
@@ -242,8 +234,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updateESAColumn(int ID, int updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET ESA_Conservation_Status = " + updatedData + " WHERE ID = " + ID;
 	}
 
@@ -254,8 +244,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updateThreatIDColumn(int ID, int updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET ThreatId = " + updatedData + " WHERE ID = " + ID;
 	}
 
@@ -266,8 +254,6 @@ public class SqlEndangeredSpecies {
 	 * @param updatedData
 	 */
 	public static String updateEffortIDColumn(int ID, int updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE EndangeredSpecies SET EffortId = " + updatedData + " WHERE ID = " + ID;
 	}
 
@@ -286,7 +272,7 @@ public class SqlEndangeredSpecies {
 	 * Queries specified species from EndangeredSpecies table.
 	 * 
 	 * @param s
-	 * @return 
+	 * @return
 	 * @author Penny Chanthavong
 	 */
 	public static String returnSpecifiedSpecies(String s) {
@@ -294,10 +280,11 @@ public class SqlEndangeredSpecies {
 	}
 
 	/**
-	 * Queries common name, scientific name, ESA conservation status based on ESA_Conservation_Status.
+	 * Queries common name, scientific name, ESA conservation status based on
+	 * ESA_Conservation_Status.
 	 * 
 	 * @param selectedStatus
-	 * @return 
+	 * @return
 	 * @author Penny Chanthavong
 	 */
 	public static String returnSpecifiedStatus(int selectedStatus) {
@@ -315,7 +302,8 @@ public class SqlEndangeredSpecies {
 	}
 
 	/**
-	 * Queries database and returns common name, scientific name, population ordered by population.
+	 * Queries database and returns common name, scientific name, population ordered
+	 * by population.
 	 * 
 	 * @return All species, specific columns, ordered by lowest population numbers
 	 */
@@ -351,5 +339,4 @@ public class SqlEndangeredSpecies {
 		return "SELECT * FROM EndangeredSpecies";
 
 	}
-
 }
