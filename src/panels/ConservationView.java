@@ -24,7 +24,6 @@ import javax.swing.JComboBox;
  */
 @SuppressWarnings("serial")
 public class ConservationView extends JPanel {
-
 	private JTextArea commNameTextArea;
 	private JTextArea sciNameTextArea;
 	private JTextArea conservStatusTextArea;
@@ -33,7 +32,6 @@ public class ConservationView extends JPanel {
 	private JTextArea websiteTextArea;
 	private JTextArea locTextArea;
 	private JComboBox<String> updateColumnBox;
-	private JButton updateStartDateBtn;
 	private JButton updateStartDateBtn_1;
 	private JButton updateOrgSubmitBtn;
 	private JButton updateWebsiteSubmitBtn;
@@ -183,18 +181,18 @@ public class ConservationView extends JPanel {
 
 		updateEntryBtn = new JButton("Update Entry");
 		updateEntryBtn.setAlignmentX(0.5f);
-		updateEntryBtn.setBounds(546, 659, 200, 50);
+		updateEntryBtn.setBounds(813, 584, 200, 50);
 		add(updateEntryBtn);
 
 		// Delete effort from table
 		deleteBtn = new JButton("Remove from Table");
-		deleteBtn.setBounds(546, 584, 200, 50);
+		deleteBtn.setBounds(588, 584, 200, 50);
 		add(deleteBtn);
 
-		String[] updateColumn = { "Select Column to Update", "Start date", "Organization", "Website", "Location" };
+		String[] updateColumn = {"Select Column to Update", "Organization", "Website", "Location" };
 
 		updateColumnBox = new JComboBox(updateColumn);
-		updateColumnBox.setBounds(776, 659, 260, 50);
+		updateColumnBox.setBounds(588, 669, 260, 50);
 		updateColumnBox.setVisible(false);
 		add(updateColumnBox);
 	}
