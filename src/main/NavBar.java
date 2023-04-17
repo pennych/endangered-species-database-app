@@ -2,11 +2,7 @@ package main;
 
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -14,14 +10,15 @@ import javax.swing.JLabel;
 /**
  * Separate JPanel that allows consistent and smooth navigation across all JPanels 
  */
+@SuppressWarnings("serial")
 public class NavBar extends JPanel {
 
-	private JButton SpeciesBtn;
-	private JButton consEffortsButton;
+	private JButton speciesBtn;
+	private JButton consEffortsBtn;
 	private JButton regionBtn;
 	private JButton homeBtn;
 	private JButton addSpeciesBtn;
-	private JLabel TitleLabel;
+	private JLabel titleLbl;
 	private JButton addConservationBtn;
 
 	/**
@@ -31,44 +28,50 @@ public class NavBar extends JPanel {
 		setLayout(null);
 		setBounds(0, 0, 1100, 263);
 		
-		TitleLabel = new JLabel("Home");
-		TitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		TitleLabel.setFont(new Font("Georgia", Font.BOLD, 55));
-		TitleLabel.setBounds(6, 26, 1088, 100);
-		add(TitleLabel);
+		titleLbl = new JLabel("Home");
+		titleLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLbl.setFont(new Font("Georgia", Font.BOLD, 55));
+		titleLbl.setBounds(6, 26, 1088, 100);
+		titleLbl.setFocusable(false);
+		add(titleLbl);
 		
-		SpeciesBtn = new JButton("All Species");
-		SpeciesBtn.setBounds(294, 138, 228, 40);
-		add(SpeciesBtn);
+		speciesBtn = new JButton("All Species");
+		speciesBtn.setBounds(294, 138, 228, 40);
+		speciesBtn.setFocusable(false);
+		add(speciesBtn);
 
-		consEffortsButton = new JButton("Conservation Efforts");
-		consEffortsButton.setBounds(546, 138, 229, 40);
-		add(consEffortsButton);
+		consEffortsBtn = new JButton("Conservation Efforts");
+		consEffortsBtn.setBounds(546, 138, 229, 40);
+		consEffortsBtn.setFocusable(false);
+		add(consEffortsBtn);
 
 		regionBtn = new JButton("Regions");
 		regionBtn.setBounds(797, 138, 229, 40);
+		regionBtn.setFocusable(false);
 		add(regionBtn);
 
 		homeBtn = new JButton("Home");
 		homeBtn.setBounds(53, 138, 229, 40);
+		homeBtn.setFocusable(false);
 		add(homeBtn);
 
 		addSpeciesBtn = new JButton("Add Species");
 		addSpeciesBtn.setBounds(294, 190, 229, 40);
+		addSpeciesBtn.setFocusable(false);
 		add(addSpeciesBtn);
 		
 		addConservationBtn = new JButton("Add Conservation Effort");
 		addConservationBtn.setBounds(546, 190, 228, 40);
+		addConservationBtn.setFocusable(false);
 		add(addConservationBtn);
 	}
 	
-
 	public JLabel getTitleLabel() {
-		return TitleLabel;
+		return titleLbl;
 	}
 
 	public void setTitleLabel(String titleLabel) {
-		TitleLabel.setText(titleLabel);
+		titleLbl.setText(titleLabel);
 	}
 
 	public JButton getHomeButton() {
@@ -80,11 +83,11 @@ public class NavBar extends JPanel {
 	}
 	
 	public JButton getConsEffortsButton() {
-		return consEffortsButton;
+		return consEffortsBtn;
 	}
 	
 	public JButton getSpeciesQueryButton() {
-		return SpeciesBtn;
+		return speciesBtn;
 	}
 
 	public JButton getAddSpeciesButton() {
@@ -94,7 +97,4 @@ public class NavBar extends JPanel {
 	public JButton getAddConservationButton() {
 		return addConservationBtn;
 	}
-	
 }
-
-
