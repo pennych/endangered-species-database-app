@@ -1,10 +1,8 @@
 package panels;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -12,12 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-
-import main.DBConnection;
-import sql.SqlConservationEffort;
-
 import javax.swing.JButton;
-import java.awt.SystemColor;
 
 /**
  * Class ConservationOverview holds the components for the Conservation Overview
@@ -47,7 +40,7 @@ public class ConservationOverview extends JPanel {
         
         ceOverviewTextArea = new JTextArea();
         ceOverviewTextArea.setBounds(10, 10, 896, 251);
-		ceOverviewTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 11));
+		ceOverviewTextArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         panel.add(ceOverviewTextArea);
         
         JScrollPane scrollPane = new JScrollPane(ceOverviewTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -61,7 +54,7 @@ public class ConservationOverview extends JPanel {
         
         JLabel lblNewLabel = new JLabel("Enter Conservation Effort ID for detailed view:");
         lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblNewLabel.setBounds(10, 11, 341, 36);
+        lblNewLabel.setBounds(85, 11, 266, 36);
         cePanel.add(lblNewLabel);
         
         ceIDTextField = new JTextField();
@@ -70,10 +63,11 @@ public class ConservationOverview extends JPanel {
         
         ceIDButton = new JButton("Submit");
         ceIDButton.setBounds(463, 12, 89, 35);
+        ceIDButton.setFocusable(false);
         cePanel.add(ceIDButton);
         
         displayErrorLbl = new JLabel("");
-        displayErrorLbl.setBounds(10, 58, 266, 36);
+        displayErrorLbl.setBounds(95, 68, 266, 36);
         cePanel.add(displayErrorLbl);
         
         JLabel lblNewLabel_1 = new JLabel("Listed below is a complete list of active conservation efforts in the state of Utah");
