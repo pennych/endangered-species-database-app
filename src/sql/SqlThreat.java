@@ -1,11 +1,5 @@
 package sql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-
 /**
  * Provides SQL statements related to the Threats table.
  * 
