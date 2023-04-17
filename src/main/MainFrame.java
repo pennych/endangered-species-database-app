@@ -2,16 +2,13 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import panels.ConservationForm;
 import panels.ConservationOverview;
 import panels.ConservationView;
@@ -36,8 +33,6 @@ import sql.SqlRegion;
 public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private JPanel current;
-	private String columnToUpdate;
-
 	private NavBar navBar;
 	private HomePage home;
 	private RegionsView region;
@@ -48,11 +43,8 @@ public class MainFrame extends JFrame {
 	private SpeciesQueryGUI speciesQuery;
 	private ConservationForm conservationForm;
 	private SpeciesForm speciesForm;
-	private Container container;
-
 	private int speciesIDToUpdate;
 	private int conserEffIDToUpdate;
-	private int esaIDToQuery;
 	private static int rID;
 
 	/**
@@ -107,7 +99,6 @@ public class MainFrame extends JFrame {
 	}
 
 	private void actionListeners() {
-		// NAVIGATION BAR BUTTONS
 		navBarButtons();
 
 		/*
@@ -148,6 +139,199 @@ public class MainFrame extends JFrame {
 					contentPane.remove(current);
 					contentPane.add(conservationView, BorderLayout.CENTER);
 					current = conservationView;
+					contentPane.revalidate();
+					contentPane.repaint();
+				}
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getUpdateEntryBtn().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				conservationView.getUpdateColumnBox().setVisible(true);
+				contentPane.revalidate();
+				contentPane.repaint();
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getUpdateColumnBox().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				String selectedColumn = (String) conservationView.getUpdateColumnBox().getSelectedItem();
+
+				if (selectedColumn == "StartDate") {
+					conservationView.getStartDateTextArea().setBackground(Color.YELLOW);
+					conservationView.getStartDateTextArea().setEditable(true);
+					conservationView.getStartDateTextArea().setVisible(true);
+				}
+
+				if (selectedColumn == "Organization") {
+					conservationView.getOrgTextArea().setBackground(Color.YELLOW);
+					conservationView.getOrgTextArea().setEditable(true);
+					conservationView.getUpdateOrgSubmitBtn().setVisible(true);
+				}
+
+				if (selectedColumn == "Website") {
+					conservationView.getWebsiteTextArea().setBackground(Color.YELLOW);
+					conservationView.getWebsiteTextArea().setEditable(true);
+					conservationView.getUpdateWebsiteSubmitBtn().setVisible(true);
+				}
+
+				if (selectedColumn == "Location") {
+					conservationView.getLocTextArea().setBackground(Color.YELLOW);
+					conservationView.getLocTextArea().setEditable(true);
+					conservationView.getUpdateLocationSubmitBtn().setVisible(true);
+				}
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getUpdateStartDateBtn().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String updatedOrgData = conservationView.getStartDateTextArea().getText();
+				int rowToUpdateValue = Integer.parseInt(conservationOV.getCeIDTextField().getText());
+
+				System.out.println(updatedOrgData);
+				System.out.println(rowToUpdateValue);
+
+				DBConnection
+						.updateColumnFromTable(SqlConservationEffort.updateStartDate(rowToUpdateValue, updatedOrgData));
+
+				System.out.print("Date entry updated");
+				conservationView.getStartDateTextArea().setBackground(Color.LIGHT_GRAY);
+				conservationView.getStartDateTextArea().setEditable(false);
+				conservationView.getUpdateColumnBox().setVisible(false);
+				conservationView.getUpdateStartDateBtn().setVisible(false);
+				contentPane.revalidate();
+				contentPane.repaint();
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getUpdateOrgSubmitBtn().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String updatedOrgData = conservationView.getOrgTextArea().getText();
+				int rowToUpdateValue = conserEffIDToUpdate;
+				System.out.println(updatedOrgData);
+				System.out.println(rowToUpdateValue);
+
+				DBConnection.updateColumnFromTable(
+						SqlConservationEffort.updateOrganizationColumn(rowToUpdateValue, updatedOrgData));
+
+				System.out.print("Date entry updated");
+				conservationView.getOrgTextArea().setBackground(Color.LIGHT_GRAY);
+				conservationView.getOrgTextArea().setEditable(false);
+				conservationView.getUpdateColumnBox().setVisible(false);
+				conservationView.getUpdateOrgSubmitBtn().setVisible(false);
+				contentPane.revalidate();
+				contentPane.repaint();
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getUpdateWebsiteSubmitBtn().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String updatedWebData = conservationView.getWebsiteTextArea().getText();
+				int rowToUpdateValue = conserEffIDToUpdate;
+				System.out.println(updatedWebData);
+				System.out.println(rowToUpdateValue);
+
+				DBConnection.updateColumnFromTable(
+						SqlConservationEffort.updateWebsiteColumn(rowToUpdateValue, updatedWebData));
+
+				conservationView.getWebsiteTextArea().setBackground(Color.LIGHT_GRAY);
+				conservationView.getWebsiteTextArea().setEditable(false);
+				conservationView.getUpdateColumnBox().setVisible(false);
+				conservationView.getUpdateWebsiteSubmitBtn().setVisible(false);
+				contentPane.revalidate();
+				contentPane.repaint();
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getUpdateLocationSubmitBtn().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String updatedLocaleData = conservationView.getLocTextArea().getText();
+				int rowToUpdateValue = conserEffIDToUpdate;
+
+				DBConnection.updateColumnFromTable(
+						SqlConservationEffort.updateLocationColumn(rowToUpdateValue, updatedLocaleData));
+
+				conservationView.getLocTextArea().setBackground(Color.LIGHT_GRAY);
+				conservationView.getLocTextArea().setEditable(false);
+				conservationView.getUpdateColumnBox().setVisible(false);
+				conservationView.getUpdateLocationSubmitBtn().setVisible(false);
+				contentPane.revalidate();
+				contentPane.repaint();
+			}
+		});
+
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationView.getDeleteBtn().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int ceID = Integer.parseInt(conservationOV.getCeIDTextField().getText());
+				DBConnection.executeSQLQuery(SqlConservationEffort.deleteConservationRow(ceID));
+
+				conservationOV.getCeOverviewTextArea()
+						.setText(DBConnection.executeQueryReturnAllCEData(SqlConservationEffort.allData()));
+				conservationOV.getCeOverviewTextArea().setLineWrap(true);
+				conservationOV.getCeOverviewTextArea().setWrapStyleWord(true);
+				conservationOV.getCeOverviewTextArea().setEditable(false);
+
+				contentPane.remove(current);
+				contentPane.add(conservationOV, BorderLayout.CENTER);
+				current = conservationOV;
+				contentPane.revalidate();
+				contentPane.repaint();
+			}
+		});
+		
+		/*
+		 * @author Penny Chanthavong
+		 */
+		conservationForm.getSubmitBtn().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (conservationForm.getStatusField().isEmpty() || conservationForm.getStartDateField().isEmpty()
+						|| conservationForm.getOrgField().isEmpty() || conservationForm.getWebsiteField().isEmpty()
+						|| conservationForm.getStatusField().isEmpty() || conservationForm.getLocField().isEmpty()) {
+					conservationForm.getErrorLbl()
+							.setText("<html><font color='red'>Enter all fields to submit form.</font></html>");
+				} else {
+					String query = SqlConservationEffort.insertDataWithParams(conservationForm.getStatusField(),
+							conservationForm.getStartDateField(), conservationForm.getSpeciesComboBoxIndex(),
+							conservationForm.getOrgField(), conservationForm.getWebsiteField(),
+							conservationForm.getStatusComboBoxIndex(), conservationForm.getLocField());
+					DBConnection.executeSQLQuery(query);
+
+					conservationOV.getCeOverviewTextArea()
+							.setText(DBConnection.executeQueryReturnAllCEData(SqlConservationEffort.allData()));
+					conservationOV.getCeOverviewTextArea().setLineWrap(true);
+					conservationOV.getCeOverviewTextArea().setWrapStyleWord(true);
+					conservationOV.getCeOverviewTextArea().setEditable(false);
+					conservationOV.getCeIDTextField().setText("");
+
+					contentPane.remove(current);
+					contentPane.add(conservationOV, BorderLayout.CENTER);
+					current = conservationOV;
 					contentPane.revalidate();
 					contentPane.repaint();
 				}
@@ -221,12 +405,10 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// get selected status to query
 				String selectedStatus = (String) speciesQuery.getStatusBox().getSelectedItem();
-				System.out.println("Status selected: " + selectedStatus);
 				String statusID = null;
 				try {
 					statusID = DBConnection.printESAID(SqlESAConservationStatus.getESAID(selectedStatus));
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				System.out.println("Status ID value: " + statusID);
@@ -281,7 +463,7 @@ public class MainFrame extends JFrame {
 		speciesView.getUpdateEntryBtn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				speciesView.getUpdateColumnBox().setVisible(true);
-				System.out.println("box visible");
+//				System.out.println("box visible");
 				contentPane.revalidate();
 				contentPane.repaint();
 			}
@@ -291,7 +473,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String selectedColumn = (String) speciesView.getUpdateColumnBox().getSelectedItem();
-				columnToUpdate = selectedColumn;
+//				columnToUpdate = selectedColumn;
 
 				if (selectedColumn == "CommonName") {
 					speciesView.getCommNameTextArea().setBackground(Color.YELLOW);
@@ -493,7 +675,7 @@ public class MainFrame extends JFrame {
 		speciesView.getDeleteBtn().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int siID = Integer.parseInt(speciesQuery.getSiIDTextField().getText());
-				DBConnection.deleteRowFromTable(SqlEndangeredSpecies.deleteSpeciesRow(siID));
+				DBConnection.executeSQLQuery(SqlEndangeredSpecies.deleteSpeciesRow(siID));
 
 				speciesQuery.getSiOverviewTextArea().setText(
 						DBConnection.executeQueryReturnAllEndangeredSpeciesData(SqlEndangeredSpecies.allData()));
@@ -505,177 +687,6 @@ public class MainFrame extends JFrame {
 				contentPane.remove(current);
 				contentPane.add(speciesQuery, BorderLayout.CENTER);
 				current = speciesQuery;
-				contentPane.revalidate();
-				contentPane.repaint();
-			}
-		});
-
-		// *** CONSERVATION VIEW ACTION LISTENERS ***
-		
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getUpdateEntryBtn().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				conservationView.getUpdateColumnBox().setVisible(true);
-				System.out.println("box visible");
-				contentPane.revalidate();
-				contentPane.repaint();
-			}
-		});
-
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getUpdateColumnBox().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				String selectedColumn = (String) conservationView.getUpdateColumnBox().getSelectedItem();
-				columnToUpdate = selectedColumn;
-
-				if (selectedColumn == "StartDate") {
-					conservationView.getStartDateTextArea().setBackground(Color.YELLOW);
-					conservationView.getStartDateTextArea().setEditable(true);
-					conservationView.getStartDateTextArea().setVisible(true);
-				}
-
-				if (selectedColumn == "Organization") {
-					conservationView.getOrgTextArea().setBackground(Color.YELLOW);
-					conservationView.getOrgTextArea().setEditable(true);
-					conservationView.getUpdateOrgSubmitBtn().setVisible(true);
-				}
-
-				if (selectedColumn == "Website") {
-					conservationView.getWebsiteTextArea().setBackground(Color.YELLOW);
-					conservationView.getWebsiteTextArea().setEditable(true);
-					conservationView.getUpdateWebsiteSubmitBtn().setVisible(true);
-				}
-
-				if (selectedColumn == "Location") {
-					conservationView.getLocTextArea().setBackground(Color.YELLOW);
-					conservationView.getLocTextArea().setEditable(true);
-					conservationView.getUpdateLocationSubmitBtn().setVisible(true);
-				}
-
-			}
-		});
-
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getUpdateStartDateBtn().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String updatedOrgData = conservationView.getStartDateTextArea().getText();
-				int rowToUpdateValue = Integer.parseInt(conservationOV.getCeIDTextField().getText());
-
-				System.out.println(updatedOrgData);
-				System.out.println(rowToUpdateValue);
-
-				DBConnection
-						.updateColumnFromTable(SqlConservationEffort.updateStartDate(rowToUpdateValue, updatedOrgData));
-
-				System.out.print("Date entry updated");
-				conservationView.getStartDateTextArea().setBackground(Color.LIGHT_GRAY);
-				conservationView.getStartDateTextArea().setEditable(false);
-				conservationView.getUpdateColumnBox().setVisible(false);
-				conservationView.getUpdateStartDateBtn().setVisible(false);
-				contentPane.revalidate();
-				contentPane.repaint();
-			}
-		});
-
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getUpdateOrgSubmitBtn().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String updatedOrgData = conservationView.getOrgTextArea().getText();
-				int rowToUpdateValue = conserEffIDToUpdate;
-				System.out.println(updatedOrgData);
-				System.out.println(rowToUpdateValue);
-
-				DBConnection.updateColumnFromTable(
-						SqlConservationEffort.updateOrganizationColumn(rowToUpdateValue, updatedOrgData));
-
-				System.out.print("Date entry updated");
-				conservationView.getOrgTextArea().setBackground(Color.LIGHT_GRAY);
-				conservationView.getOrgTextArea().setEditable(false);
-				conservationView.getUpdateColumnBox().setVisible(false);
-				conservationView.getUpdateOrgSubmitBtn().setVisible(false);
-				contentPane.revalidate();
-				contentPane.repaint();
-			}
-		});
-
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getUpdateWebsiteSubmitBtn().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String updatedWebData = conservationView.getWebsiteTextArea().getText();
-				int rowToUpdateValue = conserEffIDToUpdate;
-				System.out.println(updatedWebData);
-				System.out.println(rowToUpdateValue);
-
-				DBConnection.updateColumnFromTable(
-						SqlConservationEffort.updateWebsiteColumn(rowToUpdateValue, updatedWebData));
-
-				System.out.print("Web entry updated");
-				conservationView.getWebsiteTextArea().setBackground(Color.LIGHT_GRAY);
-				conservationView.getWebsiteTextArea().setEditable(false);
-				conservationView.getUpdateColumnBox().setVisible(false);
-				conservationView.getUpdateWebsiteSubmitBtn().setVisible(false);
-				contentPane.revalidate();
-				contentPane.repaint();
-			}
-		});
-
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getUpdateLocationSubmitBtn().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String updatedLocaleData = conservationView.getLocTextArea().getText();
-				int rowToUpdateValue = conserEffIDToUpdate;
-				System.out.println(updatedLocaleData);
-				System.out.println(rowToUpdateValue);
-
-				DBConnection.updateColumnFromTable(
-						SqlConservationEffort.updateLocationColumn(rowToUpdateValue, updatedLocaleData));
-
-				System.out.print("Locale entry updated");
-				conservationView.getLocTextArea().setBackground(Color.LIGHT_GRAY);
-				conservationView.getLocTextArea().setEditable(false);
-				conservationView.getUpdateColumnBox().setVisible(false);
-				conservationView.getUpdateLocationSubmitBtn().setVisible(false);
-				contentPane.revalidate();
-				contentPane.repaint();
-			}
-		});
-
-		// --- DELETE CONSERVATION ENTRY ---
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationView.getDeleteBtn().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int ceID = Integer.parseInt(conservationOV.getCeIDTextField().getText());
-				DBConnection.deleteRowFromTable(SqlConservationEffort.deleteConservationRow(ceID));
-
-				conservationOV.getCeOverviewTextArea()
-						.setText(DBConnection.executeQueryReturnAllCEData(SqlConservationEffort.allData()));
-				conservationOV.getCeOverviewTextArea().setLineWrap(true);
-				conservationOV.getCeOverviewTextArea().setWrapStyleWord(true);
-				conservationOV.getCeOverviewTextArea().setEditable(false);
-
-				System.out.print("row deleted");
-				contentPane.remove(current);
-				contentPane.add(conservationOV, BorderLayout.CENTER);
-				current = conservationOV;
 				contentPane.revalidate();
 				contentPane.repaint();
 			}
@@ -741,7 +752,7 @@ public class MainFrame extends JFrame {
 				String query = SqlEndangeredSpecies.insertDataWithParams(speciesForm.getNameField(),
 						speciesForm.getScientificField(), speciesForm.getClassField(), speciesForm.getPopulationField(),
 						speciesForm.getESASelection(), speciesForm.getThreatSelection(), 0);
-				DBConnection.executeQueryInsertDataToDB(query);
+				DBConnection.executeSQLQuery(query);
 
 				speciesQuery.getSiOverviewTextArea().setText(
 						DBConnection.executeQueryReturnAllEndangeredSpeciesData(SqlEndangeredSpecies.allData()));
@@ -757,40 +768,6 @@ public class MainFrame extends JFrame {
 				contentPane.repaint();
 			}
 		});
-
-		/*
-		 * @author Penny Chanthavong
-		 */
-		conservationForm.getSubmitBtn().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (conservationForm.getStatusField().isEmpty() || conservationForm.getStartDateField().isEmpty()
-						|| conservationForm.getOrgField().isEmpty() || conservationForm.getWebsiteField().isEmpty()
-						|| conservationForm.getStatusField().isEmpty() || conservationForm.getLocField().isEmpty()) {
-					conservationForm.getErrorLbl()
-							.setText("<html><font color='red'>Enter all fields to submit form.</font></html>");
-				} else {
-					String query = SqlConservationEffort.insertDataWithParams(conservationForm.getStatusField(),
-							conservationForm.getStartDateField(), conservationForm.getSpeciesComboBoxIndex(),
-							conservationForm.getOrgField(), conservationForm.getWebsiteField(),
-							conservationForm.getStatusComboBoxIndex(), conservationForm.getLocField());
-					DBConnection.executeQueryInsertDataToDB(query);
-
-					conservationOV.getCeOverviewTextArea()
-							.setText(DBConnection.executeQueryReturnAllCEData(SqlConservationEffort.allData()));
-					conservationOV.getCeOverviewTextArea().setLineWrap(true);
-					conservationOV.getCeOverviewTextArea().setWrapStyleWord(true);
-					conservationOV.getCeOverviewTextArea().setEditable(false);
-					conservationOV.getCeIDTextField().setText("");
-
-					contentPane.remove(current);
-					contentPane.add(conservationOV, BorderLayout.CENTER);
-					current = conservationOV;
-					contentPane.revalidate();
-					contentPane.repaint();
-				}
-			}
-		});
-
 	}
 
 	private void navBarButtons() {
@@ -894,7 +871,7 @@ public class MainFrame extends JFrame {
 	 * @return the correct region description
 	 */
 	private static String getDescription(int id) {
-		String desc = "hi";
+		String desc = "";
 		switch (id) {
 		case 1:
 			desc = "The Canyon Country District, comprised of the Moab and Monticello Field Offices manages about 3.6 million surface acres, providing opportunities for commercial recreation, livestock grazing, mining and oil and gas exploration, supporting local and regional economies in many ways. This part of the Colorado Plateau is best known for its world class scenery, stark red rock canyons juxtaposed against the backdrop of the La Sal and Abajo Mountain ranges, and its multitude of recreation opportunities.";
