@@ -81,8 +81,6 @@ public class SqlConservationEffort {
 	 * @return SQL query
 	 */
 	public static String updateOrganizationColumn(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE ConservationEffort SET Organization = " + "'" + updatedData + "'" + " WHERE cID = " + ID;
 	}
 
@@ -94,8 +92,6 @@ public class SqlConservationEffort {
 	 * @return SQL query
 	 */
 	public static String updateWebsiteColumn(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE ConservationEffort SET Website = " + "'" + updatedData + "'" + " WHERE cID = " + ID;
 	}
 
@@ -107,8 +103,6 @@ public class SqlConservationEffort {
 	 * @return SQL query
 	 */
 	public static String updateLocationColumn(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE ConservationEffort SET Location = " + "'" + updatedData + "'" + " WHERE cID = " + ID;
 	}
 
@@ -120,8 +114,6 @@ public class SqlConservationEffort {
 	 * @return SQL query
 	 */
 	public static String updateStartDate(int ID, String updatedData) {
-		System.out.println("ID to update: " + ID);
-		System.out.println("Value to enter: " + updatedData);
 		return "UPDATE ConservationEffort SET StartDate = '" + updatedData + "' WHERE cID = " + ID;
 	}
 
